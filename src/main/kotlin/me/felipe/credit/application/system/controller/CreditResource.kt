@@ -1,11 +1,13 @@
 package me.felipe.credit.application.system.controller
 
 import me.felipe.credit.application.system.dto.CreditDto
+import me.felipe.credit.application.system.dto.CreditView
 import me.felipe.credit.application.system.dto.CreditViewList
 import me.felipe.credit.application.system.entity.Credit
 import me.felipe.credit.application.system.service.impl.CreditService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import java.util.stream.Collectors
 
 @Controller
@@ -25,5 +27,11 @@ class CreditResource(
             .map { credit: Credit -> CreditViewList(credit) }.collect(
             Collectors.toList()
         )
+    }
+
+    @GetMapping
+    fun findByCreditCode(@RequestParam(value = "customerId") customerId: Long, @PathVariable creditCode: UUID): CreditView {
+        val credit: Credit = this.creditService.findByCreditCode(customerId, creditCode)
+        return CreditView(credit)
     }
 }
